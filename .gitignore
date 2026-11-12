@@ -1,0 +1,22 @@
+# Competition data and generated outputs
+data/
+runs/
+outputs/
+
+# Model weights are distributed through GitHub Releases
+artifacts/weights/*.pt
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Environments and editors
+.venv/
+venv/
+.idea/
+.vscode/
+
+# System files
+.DS_Store
+Thumbs.db

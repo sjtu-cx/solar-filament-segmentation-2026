@@ -1,0 +1,48 @@
+name: qt01_ttah
+description: YOLO26m-seg with detached mask-IoU mixed into positive class targets and horizontal-flip TTA.
+trainer: quality_target
+run_name: QT01_full_y26m_2048_quality_target_mix050_seed42
+epochs: 26
+imgsz: 2048
+batch: 4
+workers: 8
+seed: 42
+training_args:
+  patience: 0
+  deterministic: true
+  amp: true
+  cache: false
+  pretrained: true
+  single_cls: true
+  exist_ok: false
+  save: true
+  save_period: -1
+  val: false
+  plots: true
+  verbose: true
+  mosaic: 0.0
+  mixup: 0.0
+  copy_paste: 0.0
+  hsv_h: 0.0
+  hsv_s: 0.0
+  hsv_v: 0.15
+  degrees: 15.0
+  translate: 0.05
+  scale: 0.10
+  shear: 0.0
+  perspective: 0.0
+  flipud: 0.5
+  fliplr: 0.5
+  close_mosaic: 0
+quality_target_mix: 0.5
+quality_target_floor: 0.0
+quality_target_scope: cropped
+views: original,hflip
+fusion_mode: best
+duplicate_iou: 0.50
+score_threshold: 0.34
+min_area: 256
+max_det: 100
+final_checkpoint: artifacts/weights/QT01_full_last.pt
+final_submission: submissions/QT01TTAH_full_submission.csv
+public_pq: 0.39

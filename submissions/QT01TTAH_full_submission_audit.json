@@ -1,0 +1,35 @@
+{
+  "audit": {
+    "columns": [
+      "filament_id",
+      "segmentation_rle"
+    ],
+    "empty_images": [
+      "20170708164010Mh",
+      "20200310113230Ch",
+      "20210607142350Bh",
+      "20211214174010Mh"
+    ],
+    "errors": [],
+    "expected_images": 180,
+    "height": 2048,
+    "images_with_instances": 176,
+    "instances": 1060,
+    "overlap_pixels": 0,
+    "total_mask_area": 2234669,
+    "valid": true,
+    "width": 2048
+  },
+  "settings": {
+    "max_det": 100,
+    "min_area": 256,
+    "output": "submissions/QT01TTAH_full_submission.csv",
+    "predictions": "artifacts/predictions/QT01_full_test_ttah_raw.jsonl",
+    "score_threshold": 0.34,
+    "small_max_fill_ratio": 1.0,
+    "small_min_area": 0,
+    "small_min_aspect_ratio": 1.0,
+    "small_score_threshold": null,
+    "test_dir": "data/MAGFiLO_1.0_Kaggle_2026/test/test_images"
+  }
+}

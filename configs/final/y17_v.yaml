@@ -1,0 +1,45 @@
+name: y17_v
+description: YOLO26m-seg trained on all 707 majority-consensus images with original and vertical-flip TTA.
+trainer: standard
+run_name: Y17_Y10_full_y26m_2048_majority_seed42
+epochs: 22
+imgsz: 2048
+batch: 4
+workers: 8
+seed: 42
+training_args:
+  patience: 0
+  deterministic: true
+  amp: true
+  cache: false
+  pretrained: true
+  single_cls: true
+  exist_ok: false
+  save: true
+  save_period: -1
+  val: false
+  plots: true
+  verbose: true
+  mosaic: 0.0
+  mixup: 0.0
+  copy_paste: 0.0
+  hsv_h: 0.0
+  hsv_s: 0.0
+  hsv_v: 0.15
+  degrees: 15.0
+  translate: 0.05
+  scale: 0.10
+  shear: 0.0
+  perspective: 0.0
+  flipud: 0.5
+  fliplr: 0.5
+  close_mosaic: 0
+views: original,vflip
+fusion_mode: best
+duplicate_iou: 0.50
+score_threshold: 0.28
+min_area: 320
+max_det: 100
+final_checkpoint: artifacts/weights/Y17_Y10_full_last.pt
+final_submission: submissions/Y17_V_full_submission.csv
+public_pq: 0.39

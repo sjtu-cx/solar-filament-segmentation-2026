@@ -1,0 +1,33 @@
+{
+  "audit": {
+    "columns": [
+      "filament_id",
+      "segmentation_rle"
+    ],
+    "empty_images": [
+      "20200310113230Ch",
+      "20211214174010Mh"
+    ],
+    "errors": [],
+    "expected_images": 180,
+    "height": 2048,
+    "images_with_instances": 178,
+    "instances": 1216,
+    "overlap_pixels": 0,
+    "total_mask_area": 2488984,
+    "valid": true,
+    "width": 2048
+  },
+  "settings": {
+    "max_det": 100,
+    "min_area": 320,
+    "output": "submissions/Y17_V_full_submission.csv",
+    "predictions": "artifacts/predictions/Y17_v_full_test_support_raw.jsonl",
+    "score_threshold": 0.28,
+    "small_max_fill_ratio": 1.0,
+    "small_min_area": 0,
+    "small_min_aspect_ratio": 1.0,
+    "small_score_threshold": null,
+    "test_dir": "data/MAGFiLO_1.0_Kaggle_2026/test/test_images"
+  }
+}

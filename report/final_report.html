@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>High-Resolution Solar Filament Instance Segmentation with Consensus Labels and Quality-Aware Calibration</title>
+  <style>
+    @page { size: A4; margin: 11mm 13mm 12mm; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { color: #111; font-family: "Times New Roman", Times, serif; font-size: 9.2pt; line-height: 1.18; }
+    .page { break-after: page; page-break-after: always; min-height: 272mm; position: relative; }
+    .page:last-child { break-after: auto; page-break-after: auto; }
+    .columns { column-count: 2; column-gap: 7mm; text-align: justify; }
+    header { text-align: center; margin: 0 5mm 3.4mm; }
+    h1 { margin: 0 0 1.8mm; font-size: 18pt; line-height: 1.04; }
+    .authors { font-size: 9.4pt; color: #555; }
+    .abstract { margin: 0 3mm 2.8mm; padding: 2.2mm 2.7mm; background: #f2f5f8; border-left: 2.2mm solid #315d7d; text-align: justify; }
+    h2, h3 { break-after: avoid; text-align: left; color: #173b55; }
+    h2 { margin: 2.1mm 0 .9mm; padding-bottom: .4mm; border-bottom: .45pt solid #8ca4b5; font-size: 12.2pt; }
+    h3 { margin: 1.6mm 0 .6mm; font-size: 10.2pt; }
+    p { margin: 0 0 1.55mm; orphans: 3; widows: 3; }
+    strong { color: #172f40; }
+    .lead { font-size: 9.6pt; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5mm; margin: 2mm 0 2.5mm; break-inside: avoid; }
+    .stat { padding: 1.8mm 1mm; background: #edf3f6; border-top: 1mm solid #315d7d; text-align: center; }
+    .stat b { display: block; color: #173b55; font: 700 14pt Arial, sans-serif; }
+    .stat span { display: block; margin-top: .7mm; font-size: 8.4pt; line-height: 1.15; }
+    .flow { display: flex; align-items: stretch; gap: 1mm; margin: 2.2mm 0; break-inside: avoid; }
+    .flow .box { flex: 1; padding: 2.5mm 1mm; border: .5pt solid #7993a5; background: #f7f9fa; text-align: center; font-size: 8.5pt; line-height: 1.15; }
+    .flow .arrow { align-self: center; color: #315d7d; font: bold 11pt Arial, sans-serif; }
+    .formula { margin: 1.5mm 0; padding: 1.7mm; background: #f7f7f7; text-align: center; break-inside: avoid; }
+    .note { margin: 1.5mm 0; padding: 1.7mm 2mm; border: .5pt solid #9db0bd; background: #f8fafb; break-inside: avoid; }
+    .callout { margin: 1.5mm 0; padding: 1.7mm 2mm; border-left: 1.8mm solid #b46a2a; background: #fff8f0; break-inside: avoid; }
+    table { width: 100%; border-collapse: collapse; margin: 1.5mm 0; font-size: 8pt; line-height: 1.12; break-inside: avoid; }
+    th, td { padding: 1mm .8mm; vertical-align: top; }
+    th { color: #fff; background: #315d7d; text-align: center; font-weight: 700; }
+    td { border-bottom: .35pt solid #ccd6dc; text-align: right; }
+    td:first-child { text-align: left; }
+    tr:nth-child(even) td { background: #f4f7f8; }
+    caption { caption-side: bottom; padding-top: 1mm; color: #444; font-size: 8pt; text-align: left; }
+    .compact td, .compact th { padding: .8mm .65mm; }
+    .barrow { display: grid; grid-template-columns: 36mm 1fr 14mm; gap: 1.7mm; align-items: center; margin: 1.4mm 0; font-size: 8.8pt; break-inside: avoid; }
+    .bar { height: 4mm; background: #e5eaed; }
+    .bar > i { display: block; height: 100%; background: #497b9d; }
+    .bar.alt > i { background: #c57a35; }
+    .decision { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5mm; margin: 2.4mm 0; break-inside: avoid; }
+    .decision > div { padding: 2.5mm; border: .6pt solid #7892a5; background: #f7fafb; }
+    .decision h3 { margin-top: 0; }
+    ul { margin: .7mm 0 1.5mm 4.5mm; padding: 0; }
+    li { margin: 0 0 .65mm; }
+    .small { font-size: 8.2pt; color: #444; }
+    figure { margin: 2.5mm 0; break-inside: avoid; }
+    figure.wide { column-span: none; }
+    figure img { display: block; width: 100%; border: .5pt solid #9aabb5; }
+    figure figcaption { margin-top: .8mm; color: #444; font-size: 8pt; line-height: 1.15; text-align: left; }
+    .annotation-strip { height: 36mm; object-fit: cover; object-position: center 8%; }
+    .figure-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5mm; }
+    .metric-plot { height: 36mm; object-fit: contain; background: #fff; }
+    .qualitative { height: 28mm; object-fit: cover; object-position: center; background: #000; }
+    .p1 .annotation-strip { height: 31mm; }
+    .p2 { font-size: 8.65pt; line-height: 1.13; }
+    .p2 h2 { margin-top: 1.6mm; font-size: 11.7pt; }
+    .p2 h3 { margin-top: 1.2mm; font-size: 9.6pt; }
+    .p2 p { margin-bottom: 1.15mm; }
+    .p2 table { font-size: 7.6pt; margin: 1.1mm 0; }
+    .p2 th, .p2 td { padding: .8mm .65mm; }
+    .footer { position: absolute; bottom: 0; left: 0; right: 0; padding-top: 1mm; border-top: .4pt solid #b8c5cd; color: #555; font-size: 7pt; text-align: right; }
+    code { font-family: "Courier New", monospace; font-size: .9em; }
+    .references { font-size: 7.5pt; line-height: 1.13; }
+    .references p { margin-bottom: 1mm; }
+  </style>
+</head>
+<body>
+
+<section class="page p1">
+  <header>
+    <h1>High-Resolution Solar Filament Instance Segmentation with Consensus Labels and Quality-Aware Calibration</h1>
+    <div class="authors">Cisdi Info Machine Vision Team · CaoXin · CISDI Information Technology CO., LTD. · Xin.A.Cao@cisdi.com.cn</div>
+  </header>
+
+  <div class="abstract"><strong>Abstract.</strong> We present a reproducible instance-segmentation
+    pipeline for thin, low-contrast solar filaments in full-disk GONG H-alpha observations. The
+    solution combines grouped validation, majority-consensus labels, 2048-pixel YOLO26m-seg
+    training, conservative test-time augmentation (TTA), and instance-aware post-processing. The
+    primary Y17-V system reaches two-fold out-of-fold (OOF) Panoptic Quality (PQ) 0.4575 and public
+    PQ 0.39. A method-diverse QT01TTAH system injects detached mask IoU into the positive
+    classification target, reaches OOF PQ 0.4568, and also scores 0.39 publicly. Extensive
+    comparisons show that increasing capacity or proposal count is ineffective; the remaining
+    bottleneck is selecting a globally consistent set of candidates and choosing the better mask
+    for already detected instances.</div>
+
+  <div class="stats">
+    <div class="stat"><b>707</b><span>physical training observations</span></div>
+    <div class="stat"><b>1,154</b><span>annotation records before grouping</span></div>
+    <div class="stat"><b>2,048²</b><span>training and output resolution</span></div>
+    <div class="stat"><b>0.39</b><span>best public PQ</span></div>
+  </div>
+
+  <figure>
+    <img class="annotation-strip" src="assets/annotation_diversity.jpg" alt="Representative grouped validation images with instance annotations">
+    <figcaption><strong>Figure 1.</strong> Representative full-disk observations and instance masks.
+      The examples show large variation in instance count, length, contrast and morphology while
+      preserving the global solar-disk context used by the final model.</figcaption>
+  </figure>
+
+  <div class="columns">
+    <h2>1. Task and Data</h2>
+    <p class="lead">The competition requires single-class <strong>instance segmentation</strong> of
+      solar filaments. Filaments are elongated absorption structures whose contrast, width and
+      topology vary substantially across observing conditions. Dark sunspots and acquisition
+      artifacts can resemble compact filament fragments, while faint filament endpoints are easily
+      lost after resizing.</p>
+    <p>The released training data contain 707 physical images but 1,154 annotation records because
+      some observations were independently labeled up to three times. Directly treating every
+      record as a new image would over-weight repeated observations and leak nearly identical pixels
+      across folds. We therefore group all annotation records belonging to the same physical image
+      before either splitting or training.</p>
+
+    <h3>1.1 Annotation disagreement</h3>
+    <p>Independent annotation passes disagree on weak structures, instance extent, fragmentation
+      and whether small dark regions are true filaments. Pairwise annotator PQ is only approximately
+      0.3596 when the official IoU&gt;0.5 matching rule is applied to the 145 two-pass observations
+      (559 TP, 476 FP and 393 FN). This is a diagnostic of label ambiguity rather than a claimed
+      performance ceiling: a model can be morphologically plausible while disagreeing with one
+      specific annotation realization.</p>
+    <p>For the final training representation, repeated masks are clustered by overlap and retained
+      when supported by a majority of available passes. Each physical image contributes exactly
+      once. Compared with majority labels, union-expanded boundaries lowered Fold0/Fold1 PQ by
+      0.0207/0.0382; selecting a single annotation pass also underperformed in our early public
+      comparison. We therefore retain majority consensus as the least unstable representation.</p>
+
+    <h2>2. Evaluation and Validation</h2>
+    <p>The official objective is <strong>Panoptic Quality (PQ)</strong>, which combines matched-mask
+      fidelity and instance recognition:</p>
+    <div class="formula">
+      PQ = SQ × RQ,&nbsp;&nbsp;
+      SQ = Σ<sub>(p,g)∈TP</sub> IoU(p,g) / |TP|,&nbsp;&nbsp;
+      RQ = |TP| / (|TP| + 0.5|FP| + 0.5|FN|).
+    </div>
+    <p>A prediction and ground-truth instance match only when mask IoU exceeds 0.5. Consequently,
+      lowering confidence may improve recall but can reduce PQ by adding false positives; a slightly
+      better boundary may also convert an unmatched prediction into a true positive. We therefore
+      track PQ, Segmentation Quality (SQ), Recognition Quality (RQ), TP, FP and FN together. The
+      organizer rubric assigns 70% to quantitative comparison and 30% to method, morphology and
+      code quality, so public PQ is evidence rather than the sole selection criterion.</p>
+
+    <h3>2.1 Leakage-safe protocol</h3>
+    <p>All records of one physical observation stay in the same fold. Two validation procedures are
+      reported explicitly. Y17 uses <em>cross-fold consistency selection</em>: a small predefined grid
+      is compared on Fold0 and Fold1 and a setting is retained only when it improves both. QT01 uses
+      <em>frozen confirmation</em>: its operating point is selected on Fold0 and evaluated unchanged
+      on Fold1. Thus Fold1 is an independent confirmation set for QT01, but not for Y17. Single-fold
+      gains are treated as hypotheses rather than sufficient evidence.</p>
+
+  </div>
+  <div class="footer">Solar Filament Segmentation Challenge 2026 · Technical Report · 1 / 4</div>
+</section>
+
+<section class="page p2">
+  <div class="columns">
+    <h2>3. End-to-End Pipeline</h2>
+    <div class="flow">
+      <div class="box"><strong>Group</strong><br>physical images</div><div class="arrow">›</div>
+      <div class="box"><strong>Aggregate</strong><br>majority masks</div><div class="arrow">›</div>
+      <div class="box"><strong>Train</strong><br>YOLO26m at 2048</div><div class="arrow">›</div>
+      <div class="box"><strong>TTA</strong><br>restore and fuse</div><div class="arrow">›</div>
+      <div class="box"><strong>Filter</strong><br>score, area, overlap</div><div class="arrow">›</div>
+      <div class="box"><strong>Audit</strong><br>COCO RLE CSV</div>
+    </div>
+    <div class="callout"><strong>Central design choice.</strong> Preserve full-disk context and
+      native 2048-pixel structure while using conservative filtering. Aggressive recall expansion
+      repeatedly increased FP faster than TP.</div>
+
+    <h2>4. Base Model and Raw Candidate Generation</h2>
+    <p>YOLO26m-seg is initialized from the official segmentation checkpoint and trained on 707
+      majority-consensus images at 2048 pixels (batch 4, AMP, seed 42). Mosaic, mixup and copy-paste
+      are disabled; mild geometric and photometric augmentation is retained. Holding the model and
+      majority labels fixed, increasing 1536 to 2048 improved Fold0 PQ 0.4257→0.4342 and Fold1
+      0.4356→0.4620; the corresponding full-data public score rose 0.37→0.38.</p>
+    <div class="note"><strong>Search without premature pruning.</strong> Validation and test inference
+      first export raw binary-mask candidates with model confidence <code>0.001</code>, YOLO NMS IoU
+      <code>0.70</code> and <code>max_det=100</code>. Every post-processing configuration is evaluated
+      from the same cached JSONL predictions, so threshold comparisons do not repeat GPU inference.</div>
+
+    <h2>5. Y17-V: Joint TTA and Filter Selection</h2>
+    <p>Y17-V uses the standard objectives and 22 full-data epochs. For each flip, masks are restored
+      to original 2048 × 2048 coordinates. Candidates from all views are sorted by score; when mask
+      IoU with an already accepted candidate is at least 0.50, the lower-score duplicate is removed.
+      This “best-mask” rule preserves single-view detections and avoids boundary blurring from pixel
+      averaging.</p>
+    <table class="compact">
+      <thead><tr><th>Search axis</th><th>Values evaluated</th><th>Selected</th></tr></thead>
+      <tbody>
+        <tr><td>TTA set</td><td>original+hflip; original+vflip; original+hflip+vflip</td><td>original+vflip</td></tr>
+        <tr><td>confidence</td><td>0.28, 0.32, 0.36, 0.40</td><td>0.28</td></tr>
+        <tr><td>minimum area</td><td>256, 320 pixels</td><td>320</td></tr>
+        <tr><td>selection</td><td>24 predefined combinations; require improvement on both folds</td><td>mean PQ 0.4575</td></tr>
+      </tbody>
+      <caption>Table 1. Y17 search. The same configuration must improve both grouped folds.</caption>
+    </table>
+    <p>The selected setting reaches 0.4430/0.4720 on Fold0/Fold1, then is transferred unchanged to
+      the full model. It yields 1,216 instances on 178/180 test images and public PQ 0.39.</p>
+
+    <h2>6. QT01TTAH: Quality-Aware Calibration</h2>
+    <p>QT01 mixes detached soft mask IoU into the positive task-aligned classification target while
+      keeping assignment and box/mask losses unchanged. For each assigned positive, the predicted
+      prototype mask and its matched ground-truth mask are cropped to the target box before soft IoU
+      is calculated; gradients do not pass through this target:</p>
+    <div class="formula">t<sub>QT</sub> = 0.5t<sub>TA</sub> + 0.5 stopgrad(IoU<sub>mask</sub>).</div>
+    <p>The 0.5 mixture was fixed by the training ablation rather than leaderboard feedback. It changes
+      confidence calibration and candidate order, not the decoded mask geometry. The 26-epoch model
+      is evaluated with original+horizontal-flip best-mask fusion. A cached evaluator searches 48
+      Fold0 configurations:</p>
+    <table class="compact">
+      <tr><th>Search axis</th><th>Values / promotion rule</th><th>Selected</th></tr>
+      <tr><td>confidence</td><td>0.20, .22, .24, .25, .26, .28, .30, .32, .34, .36, .38, .40</td><td>.34</td></tr>
+      <tr><td>minimum area</td><td>128, 256, 320, 384 pixels</td><td>256</td></tr>
+      <tr><td>gate</td><td>ΔPQ ≥ .0108; SQ drop ≤ .003; FP increase ≤ 50</td><td>pass</td></tr>
+      <tr><td>confirmation</td><td>freeze Fold0 setting and evaluate Fold1; no re-tuning</td><td>F1 .4651</td></tr>
+      <caption>Table 2. QT01 calibration. Public scores are excluded from parameter selection.</caption>
+    </table>
+    <p>TTA raises Fold0 PQ from 0.4388 to 0.4485 (TP 1,023→1,061; FN 618→580). The frozen setting
+      yields 1,060 instances on 176/180 test images and public PQ 0.39.</p>
+
+    <h2>7. Deterministic Output Resolution</h2>
+    <p>Confidence and area are searched jointly: confidence controls the TP/FP operating point,
+      while area suppresses small fragments and changes both RQ and SQ. For every image the final
+      transformation is deterministic:</p>
+    <ol>
+      <li>filter by the selected confidence, sort descending, and keep at most 100 candidates;</li>
+      <li>initialize an empty 2048 × 2048 occupied-pixel map;</li>
+      <li>for each candidate, set <code>clean = mask AND NOT occupied</code>;</li>
+      <li>recompute area after cleaning and reject empty or sub-threshold masks;</li>
+      <li>add accepted pixels to <code>occupied</code>, then encode the cleaned mask as COCO RLE.</li>
+    </ol>
+    <p>This score-priority policy prevents double assignment while retaining the strongest instance
+      shape. Audits check 180 image IDs, contiguous instance IDs, decodable dimensions and exactly
+      zero overlapping pixels. Full-data inference reuses OOF-selected parameters; neither test
+      predictions nor leaderboard scores are used for calibration.</p>
+
+    <h3>7.1 Reproducibility</h3>
+    <p>The release includes exact configs, cached raw predictions, TTA/fusion code, the fast PQ sweep,
+      RLE construction, audits, checkpoints and SHA256 manifests. Both final CSVs were rebuilt with
+      exact hash matches in the clean Python 3.8.13, PyTorch 1.10.2 and Ultralytics 8.4.15 release
+      environment; the selected checkpoints were originally trained with the repository's
+      Ultralytics 8.4.3 checkout. One executable
+      Notebook covers preparation, both training variants, inference, CSV reconstruction and
+      integrity verification; no external data, test labeling or private test metadata is used.</p>
+
+    <h3>7.2 Measured efficiency</h3>
+    <table class="compact">
+      <tr><th>Stage</th><th>Measured on one RTX A6000</th></tr>
+      <tr><td>Y17 base training</td><td>22 epochs, 1.119 h, peak log memory ≈33.7 GB</td></tr>
+      <tr><td>QT01 training</td><td>26 epochs, 1 h 33 min 30 s, peak log memory ≈33.7 GB</td></tr>
+      <tr><td>single-view model inference</td><td>52.5 ms/image model time in the Y17 validation log</td></tr>
+      <tr><td>QT01 180-image full pipeline</td><td>7 min 7 s base prediction + 1 min 32 s CSV stage</td></tr>
+      <tr><td>additional horizontal TTA view</td><td>14 min 20 s including mask decode/export and fusion</td></tr>
+      <caption>Table 3. Wall-clock logs include I/O where stated; model-only timing excludes mask export.</caption>
+    </table>
+  </div>
+  <div class="footer">Solar Filament Segmentation Challenge 2026 · Technical Report · 2 / 4</div>
+</section>
+
+<section class="page">
+  <div class="columns">
+    <h2>8. Main Results</h2>
+    <table>
+      <thead><tr><th>System</th><th>Fold0</th><th>Fold1</th><th>Mean</th><th>Public</th></tr></thead>
+      <tbody>
+        <tr><td>Y10/Y13 base</td><td>.4342</td><td>.4620</td><td>.4481</td><td>.38</td></tr>
+        <tr><td><strong>Y17-V</strong></td><td>.4430</td><td>.4720</td><td><strong>.4575</strong></td><td><strong>.39</strong></td></tr>
+        <tr><td><strong>QT01TTAH</strong></td><td>.4485</td><td>.4651</td><td>.4568</td><td><strong>.39</strong></td></tr>
+      </tbody>
+      <caption>Table 4. PQ under the grouped two-fold protocol and on the public leaderboard.</caption>
+    </table>
+    <div class="barrow"><span>Y10/Y13 base</span><div class="bar"><i style="width:89.6%"></i></div><b>.4481</b></div>
+    <div class="barrow"><span>Y17-V</span><div class="bar"><i style="width:91.5%"></i></div><b>.4575</b></div>
+    <div class="barrow"><span>QT01TTAH</span><div class="bar alt"><i style="width:91.4%"></i></div><b>.4568</b></div>
+    <p class="small">Bar scale is 0–0.50 PQ. Fold means are used only for relative comparison under
+      the same grouped protocol; public PQ is evaluated on a different image set.</p>
+
+    <figure class="wide">
+      <div class="figure-grid">
+        <img class="metric-plot" src="assets/ablation_pq_sq_rq.png" alt="PQ SQ RQ comparison">
+        <img class="metric-plot" src="assets/ablation_tp_fp_fn.png" alt="TP FP FN comparison">
+      </div>
+      <figcaption><strong>Figure 2.</strong> Example of why aggregate PQ must be decomposed. Removing
+        one auxiliary objective leaves PQ/SQ/RQ nearly unchanged overall (left), yet substantially
+        shifts TP, FP and FN counts (right). Similar total PQ can hide different operational failure
+        modes and may not transfer across folds.</figcaption>
+    </figure>
+
+    <h2>9. Architecture Comparisons</h2>
+    <p>We tested whether the 0.39 plateau was caused by insufficient model capacity or architecture.
+      None of the standalone alternatives surpassed high-resolution YOLO26m.</p>
+    <table class="compact">
+      <thead><tr><th>Route</th><th>Representative result</th><th>Public PQ</th><th>Decision</th></tr></thead>
+      <tbody>
+        <tr><td>YOLO26m-seg</td><td>Y17 two-fold .4575</td><td><strong>.39</strong></td><td>retain</td></tr>
+        <tr><td>Mask2Former</td><td>two-fold ≈ .4291</td><td>.37</td><td>mask complement only</td></tr>
+        <tr><td>SegFormer ROI</td><td>SF01 selective refinement</td><td>.37</td><td>stop standalone</td></tr>
+        <tr><td>RF-DETR Seg</td><td>R00 full baseline</td><td>.29</td><td>stop standalone</td></tr>
+        <tr><td>EUPE ConvNeXt-T</td><td>two-fold ≈ .3576</td><td>.30</td><td>stop backbone swap</td></tr>
+        <tr><td>EdgeCrafter</td><td>E02 full</td><td>.25</td><td>stop standalone</td></tr>
+        <tr><td>YOLO26l-seg</td><td>Fold0 .4169</td><td>—</td><td>capacity not limiting</td></tr>
+      </tbody>
+      <caption>Table 5. Alternative routes. Some rows use different validation subsets; they establish
+        direction, not a strictly controlled ranking.</caption>
+    </table>
+
+    <h2>10. Controlled Ablations</h2>
+    <table class="compact">
+      <thead><tr><th>Question</th><th>Experiment</th><th>Observed result</th><th>Conclusion</th></tr></thead>
+      <tbody>
+        <tr><td>Use more annotation foreground?</td><td>Y14/Y23 union or merged labels</td><td>public .38</td><td>extra foreground adds ambiguity</td></tr>
+        <tr><td>Normalize contrast?</td><td>IMG01 robust normalization</td><td>public .37</td><td>removes useful intensity cues</td></tr>
+        <tr><td>Increase mask supervision resolution?</td><td>YS05B2 native mask</td><td>public .38</td><td>not the dominant limit</td></tr>
+        <tr><td>Add separate quality head?</td><td>Q01/Q01TTAH</td><td>Fold0 gain; public .38</td><td>cross-fold calibration unstable</td></tr>
+        <tr><td>Weight disagreement regions?</td><td>DW01/DW01TTAH</td><td>public .38/.38</td><td>RQ/SQ trade-off, no transfer</td></tr>
+        <tr><td>Add instance SoftIoU?</td><td>IL01</td><td>F0 +.0079; F1 −.0106</td><td>single-fold overfit</td></tr>
+        <tr><td>Oversample difficult images?</td><td>DH01</td><td>both folds lower</td><td>difficulty is not solved by repetition</td></tr>
+        <tr><td>Use more TTA views?</td><td>Y20 multi-view</td><td>public .39</td><td>third view adds no gain</td></tr>
+      </tbody>
+      <caption>Table 6. Major controlled questions and decisions.</caption>
+    </table>
+
+    <h2>11. Candidate-Selection Diagnostics</h2>
+    <p>At a low threshold, YOLO candidates cover <strong>91.86%</strong> of ground-truth instances,
+      while the final filtered output covers only <strong>62.09%</strong>. An oracle that selects the
+      best fixed-size candidate subset raises five-fold PQ from approximately 0.4332 to 0.5737
+      (+0.1405). Here “raw” means stored post-NMS output at confidence 0.001, IoU 0.70 and
+      <code>max_det=100</code>; it is not the pre-NMS network ceiling. The oracle uses ground truth
+      only to estimate headroom and is never applied to test inference. The model therefore generates
+      many useful candidates but does not rank their global retention value accurately.</p>
+    <p>Learned post-processing did not close this gap. Pairwise ranking reached AUC 0.976–0.984 but
+      improved five-fold PQ by only +0.00025; local visual re-ranking gave +0.00167 and cross-fold
+      fusion +0.00073. Later controls agree: BD01 lowers the two-fold mean .4481→.4441, XM01R gives
+      ΔPQ −.00064, and CS01 is negative on all five folds (mean −.01944). Candidate-level accuracy
+      is insufficient because PQ depends on set size, duplicates, conflicts and TP/FP/FN balance.</p>
+
+    <div class="callout"><strong>Key negative result.</strong> More proposals, larger models and
+      high binary-ranking accuracy do not imply better PQ. The unresolved problem is structured
+      selection of a mutually compatible instance set.</div>
+  </div>
+  <div class="footer">Solar Filament Segmentation Challenge 2026 · Technical Report · 3 / 4</div>
+</section>
+
+<section class="page">
+  <div class="columns">
+    <h2>12. Cross-Model Complementarity</h2>
+    <p>Although Mask2Former is weaker as a standalone model, it sometimes produces a more accurate
+      boundary for an instance already detected by YOLO. We pair spatially corresponding YOLO and
+      Mask2Former masks without changing instance count, then use ground truth only as an oracle to
+      estimate the upper bound of choosing the better mask.</p>
+    <div class="stats" style="grid-template-columns:repeat(3,1fr)">
+      <div class="stat"><b>+.0237</b><span>mean matched-mask oracle PQ</span></div>
+      <div class="stat"><b>34–36%</b><span>pairs preferring the M2F mask</span></div>
+      <div class="stat"><b>6–7%</b><span>TP rate of M2F-only candidates</span></div>
+    </div>
+    <p>The result localizes the useful complementarity: select between two masks for the same
+      detected object, rather than add all model-unique candidates. EdgeCrafter provides only about
+      +0.008 oracle gain. A learned matched-mask selector remains promising, but the initial
+      full-resolution prototype was computationally inefficient and was not used in the final
+      submission.</p>
+
+    <h2>13. Error Analysis</h2>
+    <h3>13.1 False negatives</h3>
+    <p>Completely missed instances are usually faint, narrow or fragmented by low-contrast regions.
+      TTA recovers some of them, but lowering confidence further introduces more false positives than
+      true positives. Some misses also reflect legitimate disagreement among annotators.</p>
+    <h3>13.2 False positives</h3>
+    <p>Compact dark structures, sunspots and imaging artifacts can receive high objectness. Global
+      appearance classifiers achieve high AUC but do not reliably resolve competition between
+      neighboring or duplicate masks, which limits downstream PQ gain.</p>
+    <h3>13.3 Boundary and fragmentation errors</h3>
+    <p>Thin endpoints and branching regions remain sensitive to resizing and thresholding. A mask
+      can have visually plausible morphology but remain just below the 0.5 matching threshold.
+      Unconditional refinement and topology repair often improve some boundaries while damaging
+      already-correct masks, producing no stable aggregate gain.</p>
+
+    <figure class="wide">
+      <div class="figure-grid" style="grid-template-columns:1fr">
+        <img class="qualitative" src="assets/qualitative_improved.jpg" alt="Example where an ablation improves a validation image">
+        <img class="qualitative" src="assets/qualitative_regressed.jpg" alt="Example where the same ablation regresses on another validation image">
+      </div>
+      <figcaption><strong>Figure 3.</strong> Fold-level behavior of one auxiliary-loss ablation. Each
+        row shows the original image, ground truth, baseline prediction and ablated prediction. The
+        same change removes a false positive in one observation (top) but misses a valid filament in
+        another (bottom), illustrating why isolated qualitative improvements require cross-fold PQ
+        confirmation.</figcaption>
+    </figure>
+
+    <h2>14. Final Submission Selection</h2>
+    <div class="decision">
+      <div><h3>Final 1 · Y17-V</h3>
+        <ul>
+          <li>highest two-fold mean PQ: 0.4575;</li>
+          <li>improves both folds over matched bases;</li>
+          <li>public PQ 0.39;</li>
+          <li>standard objective and simpler reproduction.</li>
+        </ul>
+      </div>
+      <div><h3>Final 2 · QT01TTAH</h3>
+        <ul>
+          <li>two-fold mean PQ: 0.4568;</li>
+          <li>public PQ 0.39;</li>
+          <li>quality-aware score calibration;</li>
+          <li>fewer retained instances and method diversity.</li>
+        </ul>
+      </div>
+    </div>
+    <p>Both outputs pass format and overlap audits. We intentionally avoid candidate union: adding
+      Y17-only candidates to QT01, or vice versa, consistently increases FP and lowers validation
+      PQ. The two independent submissions better represent uncertainty about score calibration and
+      candidate count. Y17-V is selected for robustness and simplicity; QT01TTAH is selected because
+      it alters the learned score target and operating point while retaining nearly identical
+      cross-fold strength, not merely because it has a different experiment identifier.</p>
+
+    <h2>15. Data Compliance and Conclusion</h2>
+    <p>High-resolution YOLO26m with consensus labels and conservative flip TTA is the most reliable
+      solution for this small, ambiguous dataset. Quality-aware targets offer a competitive second
+      formulation, but do not break the public 0.39 plateau. The strongest remaining opportunity is
+      not larger-scale training; it is structured candidate-set optimization and conservative
+      matched-instance mask selection, evaluated under fixed cross-fold protocols. No test-set hand
+      labeling, external data or private test metadata is used. In particular, only annotations in
+      the competition training package are used; public MAGFiLO annotations corresponding to the
+      competition test observations were neither accessed nor used.</p>
+
+    <h2>References</h2>
+    <div class="references">
+      <p>[1] Kirillov et al., “Panoptic Segmentation,” CVPR, 2019.</p>
+      <p>[2] Ahmadzadeh et al., “MAGFiLO: a manually annotated dataset of solar filaments,”
+        <em>Scientific Data</em>, 2024, doi:10.1038/s41597-024-03876-y.</p>
+      <p>[3] Ultralytics, “Ultralytics YOLO,” software release 8.4.15, 2026.</p>
+      <p>[4] Cheng et al., “Masked-attention Mask Transformer for Universal Image Segmentation,” CVPR, 2022.</p>
+      <p>[5] Xie et al., “SegFormer: Simple and Efficient Design for Semantic Segmentation,” NeurIPS, 2021.</p>
+      <p>[6] Liu et al., “A ConvNet for the 2020s,” CVPR, 2022.</p>
+    </div>
+  </div>
+  <div class="footer">Solar Filament Segmentation Challenge 2026 · Technical Report · 4 / 4</div>
+</section>
+
+</body>
+</html>
