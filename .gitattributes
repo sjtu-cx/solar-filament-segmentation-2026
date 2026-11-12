@@ -1,0 +1,1 @@
+artifacts/predictions/*.jsonl text eol=lf
