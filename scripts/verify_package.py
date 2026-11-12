@@ -136,6 +136,11 @@ def main() -> int:
         "requirements.txt",
         "configs/final/y17_v.yaml",
         "configs/final/qt01_ttah.yaml",
+        "src/filament_seg/data/__init__.py",
+        "src/filament_seg/data/coco.py",
+        "src/filament_seg/data/folds.py",
+        "src/filament_seg/data/consensus.py",
+        "src/filament_seg/data/yolo.py",
         "report/main_draft.tex",
         "report/Solar_Filament_Final_Technical_Report.pdf",
     ):
