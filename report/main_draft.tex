@@ -22,10 +22,11 @@
 \begin{abstract}
 We present a reproducible instance-segmentation pipeline for GONG H-$\alpha$ observations.
 YOLO26m-seg is trained at 2048-pixel resolution on 707 physical observations using
-majority-consensus aggregation of repeated annotations. Our primary Y17-V system uses vertical-flip
-test-time augmentation (TTA) and obtains two-fold out-of-fold Panoptic Quality (PQ) 0.4575.
-QT01TTAH introduces a detached mask-IoU quality target and horizontal-flip TTA, obtaining PQ
-0.4568. Both final candidates score 0.39 on the public leaderboard. Controlled ablations show that
+majority-consensus aggregation of repeated annotations. Our selected QT01TTAH submission introduces
+a detached mask-IoU quality target and horizontal-flip test-time augmentation (TTA), obtaining
+two-fold out-of-fold Panoptic Quality (PQ) 0.4568 and public PQ 0.39. The Y17-V reference system
+uses the standard objective and vertical-flip TTA, obtaining PQ 0.4575 and the same public score.
+Controlled ablations show that
 candidate selection, rather than model capacity or raw proposal recall, is the main remaining
 bottleneck.
 \end{abstract}
@@ -223,16 +224,17 @@ QT01TTAH & .4485 & .4651 & .4568 & \textbf{.39} \\
 \end{table}
 
 Y17-V improves both matched base folds. QT01TTAH has comparable mean PQ while changing score
-formation, making it a method-diverse second candidate. Y17-V emits 1,216 instances on 178/180 test
+formation and is selected as the single final submission. Y17-V is retained as a robust reference.
+Y17-V emits 1,216 instances on 178/180 test
 images; QT01TTAH emits 1,060 on 176/180. Both audited files contain valid $2048^2$ COCO RLE masks
 and zero overlapping output pixels.
 
 \subsection{Cross-fold and leaderboard interpretation}
 The two folds differ by .0278 PQ for Y17-V and .0166 for QT01TTAH, which is material relative to most
 ablation gains. We therefore reject changes supported by only one fold. Y17-V is the higher-mean,
-standard-objective candidate; QT01TTAH is retained because it reaches the same public PQ through a
-different confidence-learning mechanism and emits 156 fewer instances. The pair provides diversity
-without using an unvalidated union that would increase false positives.
+standard-objective reference; QT01TTAH is selected because it reaches the same public PQ through a
+different confidence-learning mechanism and emits 156 fewer instances. The reference comparison
+demonstrates method diversity without using an unvalidated union that would increase false positives.
 
 OOF means (.4575 and .4568) exceed public PQ (.39), but the ranking between the two systems remains
 stable. We interpret this gap as evidence of distribution and annotation-policy differences, not as
@@ -373,7 +375,7 @@ competition training annotations are used; public MAGFiLO annotations correspond
 test observations were neither accessed nor used.
 
 Reproduction has two supported levels. Exact reconstruction starts from archived raw predictions
-and deterministically rebuilds both CSV hashes; model reproduction downloads the released
+and deterministically rebuilds the selected QT01TTAH CSV and the Y17-V reference CSV; model reproduction downloads the released
 checkpoints and reruns base/TTA inference. Full retraining additionally rebuilds consensus labels
 from the official COCO JSON and trains from the declared pretrained checkpoint. The verification
 script checks required files, SHA256 values, CSV columns, all test identifiers, RLE decodability,
@@ -391,7 +393,7 @@ Artifact & Reproduction role \\
 \midrule
 Configurations & Freeze training, TTA, thresholds, and area filters \\
 Notebook & Execute preparation through audited submission generation \\
-Checkpoints & Reproduce model inference for both final candidates \\
+Checkpoints & Reproduce selected QT01TTAH and the Y17-V reference \\
 Raw predictions & Rebuild exact CSV files without retraining \\
 Manifest/SHA256 & Verify provenance and byte-level identity \\
 \bottomrule
@@ -400,8 +402,9 @@ Manifest/SHA256 & Verify provenance and byte-level identity \\
 
 \subsection{Conclusion}
 High-resolution YOLO26m with conservative flip TTA is the most reliable configuration.
-Quality-aware targets provide a competitive alternative, but both candidates plateau at public PQ
-0.39. Future work should prioritize set-aware candidate ranking and conservative matched-instance
+QT01TTAH is selected as the single final submission because its quality-aware target provides a
+technically distinct calibration path while matching the 0.39 public PQ of the stronger-mean Y17-V
+reference. Future work should prioritize set-aware candidate ranking and conservative matched-instance
 mask selection rather than simply increasing capacity or proposal count.
 
 % ==================================== %

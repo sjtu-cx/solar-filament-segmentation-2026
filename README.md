@@ -4,19 +4,19 @@
 **Author:** CaoXin  
 **Contact:** Xin.A.Cao@cisdi.com.cn
 
-This repository reproduces the two selected final submissions with one codebase and one executable
-Notebook. Both obtained public Panoptic Quality (PQ) `0.39`, but they are retained for different
-technical reasons:
+This repository reproduces the selected final submission and a strong reference baseline with one
+codebase and one executable Notebook. Both obtained public Panoptic Quality (PQ) `0.39`, but they
+serve different roles:
 
-| Final slot | File | Role | Grouped Fold0/Fold1 PQ | Mean PQ |
+| Status | File | Role | Grouped Fold0/Fold1 PQ | Mean PQ |
 |---|---|---|---:|---:|
-| 1 | `Y17_V_full_submission.csv` | Robust primary: standard objective plus vertical-flip TTA | 0.443035 / 0.471995 | **0.457515** |
-| 2 | `QT01TTAH_full_submission.csv` | Method-diverse alternative: quality-aware target plus horizontal-flip TTA | 0.448509 / 0.465089 | **0.456799** |
+| Reference | `Y17_V_full_submission.csv` | Robust baseline: standard objective plus vertical-flip TTA | 0.443035 / 0.471995 | **0.457515** |
+| **Selected final** | `QT01TTAH_full_submission.csv` | Quality-aware target plus horizontal-flip TTA | 0.448509 / 0.465089 | **0.456799** |
 
-Y17-V is the highest cross-fold mean and the simpler system. QT01TTAH changes how classification
-scores are trained by mixing detached mask IoU into positive targets; it therefore provides a
-meaningful calibration alternative rather than a duplicate checkpoint. A simple union of the two
-systems was rejected because it added false positives and reduced validation PQ.
+Y17-V is the highest cross-fold mean and the simpler reference. QT01TTAH changes how classification
+scores are trained by mixing detached mask IoU into positive targets; this technically distinct
+calibration path is the selected final submission. A simple union of the two systems was rejected
+because it added false positives and reduced validation PQ.
 
 The validation roles are intentionally distinguished: Y17-V was chosen by consistency over a small
 predefined Fold0/Fold1 grid, whereas QT01 selected its operating point on Fold0 and evaluated it
@@ -43,8 +43,8 @@ Original source code in this repository is licensed under `AGPL-3.0-only`; see `
 `NOTICE`. Copyright (C) 2026 CISDI Information Technology CO., LTD. Competition data are not
 redistributed or relicensed, and third-party components retain their original terms.
 
-One public repository is sufficient for both final submissions because the `--variant` argument
-selects the complete training, inference, and post-processing path for each system.
+One public repository covers the selected submission and reference baseline because the `--variant`
+argument selects the complete training, inference, and post-processing path for each system.
 
 ## Data provenance
 
@@ -113,7 +113,7 @@ python scripts/download_artifacts.py
 python scripts/verify_package.py
 ```
 
-`verify_package.py` checks both final CSVs, all three checkpoints, both raw prediction files,
+`verify_package.py` checks the selected and reference CSVs, all three checkpoints, both raw prediction files,
 audits, hashes, Notebook structure, report files, and required configurations. Before publishing,
 run the stricter check:
 
@@ -179,7 +179,7 @@ numerical differences across GPU architectures even with deterministic execution
 ## Notebook
 
 Open `notebooks/final_pipeline.ipynb` and choose **Run All**. By default it reconstructs and verifies
-both final CSVs. Set `RUN_PREPARE`, `RUN_TRAINING`, or `RUN_GPU_INFERENCE` to `True` to execute those
+the selected and reference CSVs. Set `RUN_PREPARE`, `RUN_TRAINING`, or `RUN_GPU_INFERENCE` to `True` to execute those
 long stages. `SOLAR_DATA_ROOT`, `SOLAR_WORK_DIR`, and `SOLAR_DEVICE` can override local paths/device
 without editing package code.
 

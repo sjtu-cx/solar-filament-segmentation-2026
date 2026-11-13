@@ -83,9 +83,9 @@
     pipeline for thin, low-contrast solar filaments in full-disk GONG H-alpha observations. The
     solution combines grouped validation, majority-consensus labels, 2048-pixel YOLO26m-seg
     training, conservative test-time augmentation (TTA), and instance-aware post-processing. The
-    primary Y17-V system reaches two-fold out-of-fold (OOF) Panoptic Quality (PQ) 0.4575 and public
-    PQ 0.39. A method-diverse QT01TTAH system injects detached mask IoU into the positive
-    classification target, reaches OOF PQ 0.4568, and also scores 0.39 publicly. Extensive
+    selected QT01TTAH submission injects detached mask IoU into the positive classification target,
+    reaches two-fold out-of-fold (OOF) Panoptic Quality (PQ) 0.4568, and scores 0.39 publicly. The
+    Y17-V reference uses the standard objective, reaches OOF PQ 0.4575, and also scores 0.39. Extensive
     comparisons show that increasing capacity or proposal count is ineffective; the remaining
     bottleneck is selecting a globally consistent set of candidates and choosing the better mask
     for already detected instances.</div>
@@ -241,7 +241,7 @@
 
     <h3>7.1 Reproducibility</h3>
     <p>The release includes exact configs, cached raw predictions, TTA/fusion code, the fast PQ sweep,
-      RLE construction, audits, checkpoints and SHA256 manifests. Both final CSVs were rebuilt with
+      RLE construction, audits, checkpoints and SHA256 manifests. The selected and reference CSVs were rebuilt with
       exact hash matches in the clean Python 3.8.13, PyTorch 1.10.2 and Ultralytics 8.4.15 release
       environment; the selected checkpoints were originally trained with the repository's
       Ultralytics 8.4.3 checkout. One executable
@@ -393,7 +393,7 @@
 
     <h2>14. Final Submission Selection</h2>
     <div class="decision">
-      <div><h3>Final 1 · Y17-V</h3>
+      <div><h3>Reference Baseline · Y17-V</h3>
         <ul>
           <li>highest two-fold mean PQ: 0.4575;</li>
           <li>improves both folds over matched bases;</li>
@@ -401,7 +401,7 @@
           <li>standard objective and simpler reproduction.</li>
         </ul>
       </div>
-      <div><h3>Final 2 · QT01TTAH</h3>
+      <div><h3>Selected Final Submission · QT01TTAH</h3>
         <ul>
           <li>two-fold mean PQ: 0.4568;</li>
           <li>public PQ 0.39;</li>
@@ -412,10 +412,9 @@
     </div>
     <p>Both outputs pass format and overlap audits. We intentionally avoid candidate union: adding
       Y17-only candidates to QT01, or vice versa, consistently increases FP and lowers validation
-      PQ. The two independent submissions better represent uncertainty about score calibration and
-      candidate count. Y17-V is selected for robustness and simplicity; QT01TTAH is selected because
-      it alters the learned score target and operating point while retaining nearly identical
-      cross-fold strength, not merely because it has a different experiment identifier.</p>
+      PQ. QT01TTAH is selected as the single final submission because it alters the learned score
+      target and operating point while retaining nearly identical cross-fold strength. Y17-V remains
+      a robust, simpler reference rather than a second Kaggle final selection.</p>
 
     <h2>15. Data Compliance and Conclusion</h2>
     <p>High-resolution YOLO26m with consensus labels and conservative flip TTA is the most reliable

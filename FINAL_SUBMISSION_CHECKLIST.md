@@ -2,8 +2,8 @@
 
 ## Kaggle final selections
 
-- [ ] Select `Y17_V_full_submission.csv` as Final Submission 1.
-- [ ] Select `QT01TTAH_full_submission.csv` as Final Submission 2.
+- [ ] Select `QT01TTAH_full_submission.csv` as the single Kaggle Final Submission (`0/1`).
+- [ ] Keep `Y17_V_full_submission.csv` as the reproducible reference baseline; do not select it on Kaggle.
 - [ ] Confirm the Kaggle submission descriptions and public scores are `0.39`.
 - [ ] Submit the final form, repository URL and four-page PDF by November 15, 2026 (use Kaggle's exact closing time).
 
@@ -20,7 +20,7 @@
 - [x] Raw predictions are included in the manifest and protected by SHA256.
 - [x] Publication-mode validation rejects private paths, pending links and report placeholders.
 - [ ] Re-run exact CSV reconstruction in a clean environment.
-- [ ] Re-run inference from both final checkpoints and compare hashes/audits.
+- [ ] Re-run inference from the selected QT01 checkpoint and compare hashes/audits; retain the completed Y17 reference audit.
 - [ ] Upload large checkpoints to a public release and fill in the manifest URLs.
 
 ## Public repository

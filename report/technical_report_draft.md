@@ -13,8 +13,9 @@
 We present a reproducible high-resolution instance-segmentation pipeline for solar filaments in
 GONG H-alpha observations. The method uses YOLO26m-seg at 2048-pixel resolution, one physical image
 per observation, majority-consensus aggregation of repeated annotations, and conservative
-flip-based test-time augmentation. We select two final variants. Y17-V uses the standard training
-objective with vertical-flip TTA and achieves two-fold OOF PQ 0.4575. QT01TTAH mixes detached
+flip-based test-time augmentation. We select QT01TTAH as the single final submission and retain
+Y17-V as a robust reference. Y17-V uses the standard training objective with vertical-flip TTA and
+achieves two-fold OOF PQ 0.4575. QT01TTAH mixes detached
 predicted mask IoU into positive classification targets and uses horizontal-flip TTA, achieving
 two-fold OOF PQ 0.4568. Both variants score 0.39 on the public leaderboard. Extensive ablations show
 that larger models, unconditional mask refinement, aggressive recall expansion, static topology
@@ -110,7 +111,8 @@ not as the only final-selection criterion.
 | QT01TTAH | 0.4485 | 0.4651 | 0.4568 | **0.39** |
 
 Y17-V improves both folds over their matched base models. QT01TTAH is close in mean PQ but changes
-the score formation mechanism, providing a method-diverse second final candidate.
+the score formation mechanism. It is selected as the single final submission, while Y17-V remains
+the reproducible reference baseline.
 
 ## 4. Ablation findings
 
